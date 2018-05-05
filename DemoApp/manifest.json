@@ -1,0 +1,23 @@
+{
+
+  "author": "NotYet",
+  "manifest_version": 2,
+  "name": "DemoApp",
+  "version": "1.0",
+
+  "description": "Youtube playlists",
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/watch?v=*"],
+      "js": ["jQuery.js","dragula.js","dragulaCaller.js", "reloadPage.js","content.js"]
+    }
+  ],
+  "permissions": [
+      "webNavigation"
+  ],
+  "background":{
+    "scripts": ["background.js"]
+  }
+
+}
