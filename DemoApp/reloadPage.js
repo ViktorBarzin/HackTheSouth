@@ -111,7 +111,6 @@ function reloadPage(){
   //edit left-defaults style
   $("#left-defaults").css({
     "background-color": "#e2efff",
-    "background-image": "C:\Users\Atanas\Desktop\background.png",
     "border": "5px dashed #a4a8ad",
     "width": "100%",
     "min-height": "100px"
