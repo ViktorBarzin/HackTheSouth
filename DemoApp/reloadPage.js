@@ -19,7 +19,35 @@ document.head.appendChild(script);*/
 
 
 
+function putBackground(){
+  console.log("Calling bg");
+  var children = $("#left-defaults").children();
+  // if(children.filter(function(index){
+      // return $(this).css("display") != "none";
+  // }).length > 0)
+  var dispayableChildren = false;
+  children.each(function(index) {
 
+    // console.log($(this).css("display"));
+    if ($(this).css("display") != "none") {
+      dispayableChildren = true;
+
+    }
+
+  })
+    // if (child.css("display") != "none"){
+      // dispayableChildren += 1;
+      // break;
+    // }
+
+  if (dispayableChildren)
+  {
+    $("#left-defaults").css("background-image", "");
+  } else {
+    console.log("Putting up the bg");
+    $("#left-defaults").css("background-image", "url('https://i.imgur.com/3PCitfU.png')");
+  }
+}
 
 
 //extract ytd-compact-video-renderer
@@ -54,6 +82,9 @@ function saveToStorage(){
 
 //executed on song dropped in left-defaults
 function onDropEvent(el, target){
+
+  putBackground();
+
   if (nextSong != null) {
     var nextSong = $("#left-defaults").children().find("a")[0].href;
   }
@@ -113,9 +144,12 @@ function reloadPage(){
     "background-color": "#e2efff",
     "border": "5px dashed #a4a8ad",
     "width": "100%",
-    "min-height": "100px"
+    "min-height": "100px",
+    "background-size": "contain",
+    "background-repeat": "no-repeat"
   });
 
+      putBackground();
 
   var script = document.createElement('script');
   script.type = 'text/javascript';
@@ -379,6 +413,5 @@ function reloadPage(){
     }, {}]
 }, {}, [1])
 //end of dragula
-
 
 }
