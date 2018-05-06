@@ -23,6 +23,7 @@ Then visit any youtube video and the "Drop songs here" section should appear on 
 - Since the extension reliese heavily on the youtube page, any future changes to its source would most probably make the extension crash in various ways. Currently (06 May 2018) it works as expected. We will try to keep it updated as much as we can.
 
 # Known issues:
+If you have any issue try refreshing the page and it should get fixed. Here are some of the known issues:
 - Going to youtube.com and then opening a video does not load the plugin.
     - **Solution** - A) Refresh the page. or B) Visitin directly "youtube.com/watch?v=asdasd" page.
 - Listening video from a youtube playlist breaks the auto play feature and the next song is from the youtube playlist rather than from the plugin videos in the queue.
