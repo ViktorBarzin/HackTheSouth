@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/watch?v=*"],
-      "js": ["jQuery.js","dragula.js","dragulaCaller.js", "reloadPage.js","content.js"],
+      "js": ["jQuery.js","dragula.js", "reloadPage.js","content.js", "dragulaCaller.js"],
       "css": ["dragula.css"]
     }
   ]

@@ -6,7 +6,7 @@
   setTimeout(function(){
     console.log("jQuery shenanigans!");
     reloadPage();
-  }, 500);
+  }, 3500);
 //}
 
 
