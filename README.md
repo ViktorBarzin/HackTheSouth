@@ -25,6 +25,8 @@ Then visit any youtube video and the "Drop songs here" section should appear on 
 # Known issues:
 - Going to youtube.com and then opening a video does not load the plugin.
     - **Solution** - A) Refresh the page. or B) Visitin directly "youtube.com/watch?v=asdasd" page.
+- Listening video from a youtube playlist breaks the auto play feature and the next song is from the youtube playlist rather than from the plugin videos in the queue.
+- Clicking the "Show more" button shows more videos that are not draggable.
 
 # Reporting bugs
 
@@ -32,4 +34,6 @@ Then visit any youtube video and the "Drop songs here" section should appear on 
 
 # Contribute
 
-We are eager for user feedback and contribution. If you have any cool ideas feel free to download the source and tweak it any way you wish or submit a pull request.
+- We are eager for user feedback and contribution. If you have any cool ideas feel free to download the source and tweak it any way you wish or submit a pull request.
+
+- You can choose from any of the known issues and try to fix them. We love pull requests
