@@ -19,7 +19,35 @@ document.head.appendChild(script);*/
 
 
 
+function putBackground(){
+  //console.log("Calling bg");
+  var children = $("#left-defaults").children();
+  // if(children.filter(function(index){
+      // return $(this).css("display") != "none";
+  // }).length > 0)
+  var dispayableChildren = false;
+  children.each(function(index) {
 
+    // console.log($(this).css("display"));
+    if ($(this).css("display") != "none") {
+      dispayableChildren = true;
+
+    }
+
+  })
+    // if (child.css("display") != "none"){
+      // dispayableChildren += 1;
+      // break;
+    // }
+
+  if (dispayableChildren)
+  {
+    $("#left-defaults").css("background-image", "");
+  } else {
+    //console.log("Putting up the bg");
+    $("#left-defaults").css("background-image", "url('https://i.imgur.com/3PCitfU.png')");
+  }
+}
 
 
 //extract ytd-compact-video-renderer
@@ -52,21 +80,65 @@ function saveToStorage(){
   localStorage.setItem('playlist', JSON.stringify(result));
 }
 
-//executed on song dropped in left-defaults
-function onDropEvent(el, target){
-  if (nextSong != null) {
-    var nextSong = $("#left-defaults").children().find("a")[0].href;
-  }
+//handle player's next song
+var nextSong;
+function setupNextSong(){
+
+  //loop through left-defaults to find the next song to play
+    var children = $("#left-defaults").children();
+    children.each(function(index) {
+      if ($(this).css("display") != "none") {
+        nextSong = $(this).find('a')[0].href;
+        localStorage.setItem("redirTo", nextSong);
+        return false;
+      }
+    });
+    console.log("Next song is " + nextSong);
+
+    //console.log("Next song is " + nextSong);
   function playNextSong(){
     window.location.href = nextSong;
+    //TODO: clear localStorage of the next song because it is the one starting
+    //var stored = localStorage.getItem("playlist");
+    //var storedArray = JSON.parse(stored);
+    //storedArray.shift();
+    //stored = JSON.stringify(storedArray);
+    //localStorage.setItem("playlist", stored);
+    //TODO: broken
   }
-  $('video')[0].addEventListener('ended',playNextSong,false);
+
+  $('video')[0].addEventListener('ended',playNextSong);
+}
+
+//executed on song dropped in left-defaults
+function onDropEvent(el, target, source){
+
+  putBackground();
+
+  setupNextSong();
 
   //format dropped element
   if(target.id == "left-defaults" && $(el).find("span").length > 0){
     $(el).css("display", "none");
-    $(el).after("<div><a href=\"" + $(el).find('a')[0].href + "\"><img src=\""+  $(el).find("img")[0].src +"\"/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
+    //$(el).after("<div><a href=\"" + $(el).find('a')[0].href + "\"><img src=\""+  $(el).find("img")[0].src +"\"/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
+    $(el).after("<div><a href='" + $(el).find('a')[0].href + "'><img src='"+  $(el).find("img")[0].src +"'/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
   //  console.log()
+  }
+
+  //flag will be set to 0 if there is no next selected song
+  if(source.id == "left-defaults"){
+    var flag = 0;
+    var children = $("#left-defaults").children();
+    children.each(function(index) {
+      if ($(this).css("display") != "none") {
+        flag = 1;
+        return false;
+      }
+    });
+    if(flag == 0){
+      nextSong = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      localStorage.setItem("redirTo", nextSong);
+    }
   }
 
 
@@ -92,9 +164,14 @@ function reloadPage(){
 
   //append all items from localStorage
   var savedSongs = JSON.parse(localStorage.getItem("playlist"));
-  if(savedSongs != null){
+  if(savedSongs != null && savedSongs.length > 0){
     for(var i=0; i<savedSongs.length;i++){
-      $("#left-defaults").append(savedSongs[i]);
+      var str = savedSongs[i];
+      //check if the one we are going to is the one we came from
+      if(!str.includes(localStorage.getItem("redirTo"))){
+        // do not console.log("--------- REMOVE IT !!!! ---------")
+        $("#left-defaults").append(savedSongs[i]);
+      }
     }
   }
 
@@ -113,9 +190,13 @@ function reloadPage(){
     "background-color": "#e2efff",
     "border": "5px dashed #a4a8ad",
     "width": "100%",
-    "min-height": "100px"
+    "min-height": "100px",
+    "background-size": "contain",
+    "background-repeat": "no-repeat"
   });
 
+      putBackground();
+      setupNextSong();
 
   var script = document.createElement('script');
   script.type = 'text/javascript';
@@ -156,7 +237,7 @@ function reloadPage(){
         //saveToStorage();
 
         drake.on("drop", function(el, target, source, sibling){
-          onDropEvent(el, target);
+          onDropEvent(el, target, source);
 
           //saveToStorage();
         });
@@ -379,6 +460,5 @@ function reloadPage(){
     }, {}]
 }, {}, [1])
 //end of dragula
-
 
 }
