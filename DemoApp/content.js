@@ -6,9 +6,6 @@
   setTimeout(function(){
     console.log("jQuery shenanigans!");
     reloadPage();
-    /*setTimeout(function(){
-      setupNextSong();
-    }, 1000)*/
   }, 3000);
 //}
 

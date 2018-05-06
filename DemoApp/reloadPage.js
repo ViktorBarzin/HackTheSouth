@@ -20,7 +20,7 @@ document.head.appendChild(script);*/
 
 
 function putBackground(){
-  console.log("Calling bg");
+  //console.log("Calling bg");
   var children = $("#left-defaults").children();
   // if(children.filter(function(index){
       // return $(this).css("display") != "none";
@@ -44,7 +44,7 @@ function putBackground(){
   {
     $("#left-defaults").css("background-image", "");
   } else {
-    console.log("Putting up the bg");
+    //console.log("Putting up the bg");
     $("#left-defaults").css("background-image", "url('https://i.imgur.com/3PCitfU.png')");
   }
 }
@@ -83,24 +83,35 @@ function saveToStorage(){
 //handle player's next song
 var nextSong;
 function setupNextSong(){
-  //if (nextSong != null) {
-    var children = $("#left-defaults").children();
-    if (children.length > 0){
-      nextSong = children.find('a')[0].href;
-    } else {
 
-    };
+  //loop through left-defaults to find the next song to play
+    var children = $("#left-defaults").children();
+    children.each(function(index) {
+      if ($(this).css("display") != "none") {
+        nextSong = $(this).find('a')[0].href;
+        localStorage.setItem("redirTo", nextSong);
+        return false;
+      }
+    });
     console.log("Next song is " + nextSong);
-  //}
+
+    //console.log("Next song is " + nextSong);
   function playNextSong(){
     window.location.href = nextSong;
-    //TODO: clear localStorage of the next song because it is starting
+    //TODO: clear localStorage of the next song because it is the one starting
+    //var stored = localStorage.getItem("playlist");
+    //var storedArray = JSON.parse(stored);
+    //storedArray.shift();
+    //stored = JSON.stringify(storedArray);
+    //localStorage.setItem("playlist", stored);
+    //TODO: broken
   }
-  $('video')[0].addEventListener('ended',playNextSong,false);
+
+  $('video')[0].addEventListener('ended',playNextSong);
 }
 
 //executed on song dropped in left-defaults
-function onDropEvent(el, target){
+function onDropEvent(el, target, source){
 
   putBackground();
 
@@ -109,8 +120,25 @@ function onDropEvent(el, target){
   //format dropped element
   if(target.id == "left-defaults" && $(el).find("span").length > 0){
     $(el).css("display", "none");
-    $(el).after("<div><a href=\"" + $(el).find('a')[0].href + "\"><img src=\""+  $(el).find("img")[0].src +"\"/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
+    //$(el).after("<div><a href=\"" + $(el).find('a')[0].href + "\"><img src=\""+  $(el).find("img")[0].src +"\"/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
+    $(el).after("<div><a href='" + $(el).find('a')[0].href + "'><img src='"+  $(el).find("img")[0].src +"'/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
   //  console.log()
+  }
+
+  //flag will be set to 0 if there is no next selected song
+  if(source.id == "left-defaults"){
+    var flag = 0;
+    var children = $("#left-defaults").children();
+    children.each(function(index) {
+      if ($(this).css("display") != "none") {
+        flag = 1;
+        return false;
+      }
+    });
+    if(flag == 0){
+      nextSong = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      localStorage.setItem("redirTo", nextSong);
+    }
   }
 
 
@@ -136,9 +164,14 @@ function reloadPage(){
 
   //append all items from localStorage
   var savedSongs = JSON.parse(localStorage.getItem("playlist"));
-  if(savedSongs != null){
+  if(savedSongs != null && savedSongs.length > 0){
     for(var i=0; i<savedSongs.length;i++){
-      $("#left-defaults").append(savedSongs[i]);
+      var str = savedSongs[i];
+      //check if the one we are going to is the one we came from
+      if(!str.includes(localStorage.getItem("redirTo"))){
+        // do not console.log("--------- REMOVE IT !!!! ---------")
+        $("#left-defaults").append(savedSongs[i]);
+      }
     }
   }
 
@@ -204,7 +237,7 @@ function reloadPage(){
         //saveToStorage();
 
         drake.on("drop", function(el, target, source, sibling){
-          onDropEvent(el, target);
+          onDropEvent(el, target, source);
 
           //saveToStorage();
         });
