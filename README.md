@@ -12,11 +12,19 @@ Check the images below:
 ##### You can add videos in the play next area by simply dragging them there.
 ##### Videos left in the the play next area do persist across tabs, browser and computer restarts as they are save in the browser local storage [More about storage here](https://www.w3schools.com/html/html5_webstorage.asp)
 
+# How do I install it?
+- This is in our todo list. Currently the way you install the app is to download the "DemoApp.zip", upack it in a directory of your choice. Then you need to go to [chrome://extensions/](chrome://extensions/) where you click the "Load upacked" button and finally select the directory you where you have unzipped the zip file.
+Then visit any youtube video and the "Drop songs here" section should appear on the top right of the page.
+
 # Important notes
 
 - Tweaking the source in any way is **strongly discouraged** unless you really know what you are doing!
 - There may or may not be future improvements and updates, however, it is tested and working on **Google chrome 64bit version 64 and version 66 for linux and windows** as well as on **Mozilla Firefox 64 bit version 58**
 - Since the extension reliese heavily on the youtube page, any future changes to its source would most probably make the extension crash in various ways. Currently (06 May 2018) it works as expected. We will try to keep it updated as much as we can.
+
+# Known issues:
+- Going to youtube.com and then opening a video does not load the plugin.
+    - **Solution** - A) Refresh the page. or B) Visitin directly "youtube.com/watch?v=asdasd" page.
 
 # Reporting bugs
 
