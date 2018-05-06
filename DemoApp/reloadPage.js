@@ -80,18 +80,31 @@ function saveToStorage(){
   localStorage.setItem('playlist', JSON.stringify(result));
 }
 
+//handle player's next song
+var nextSong;
+function setupNextSong(){
+  //if (nextSong != null) {
+    var children = $("#left-defaults").children();
+    if (children.length > 0){
+      nextSong = children.find('a')[0].href;
+    } else {
+
+    };
+    console.log("Next song is " + nextSong);
+  //}
+  function playNextSong(){
+    window.location.href = nextSong;
+    //TODO: clear localStorage of the next song because it is starting
+  }
+  $('video')[0].addEventListener('ended',playNextSong,false);
+}
+
 //executed on song dropped in left-defaults
 function onDropEvent(el, target){
 
   putBackground();
 
-  if (nextSong != null) {
-    var nextSong = $("#left-defaults").children().find("a")[0].href;
-  }
-  function playNextSong(){
-    window.location.href = nextSong;
-  }
-  $('video')[0].addEventListener('ended',playNextSong,false);
+  setupNextSong();
 
   //format dropped element
   if(target.id == "left-defaults" && $(el).find("span").length > 0){
@@ -150,6 +163,7 @@ function reloadPage(){
   });
 
       putBackground();
+      setupNextSong();
 
   var script = document.createElement('script');
   script.type = 'text/javascript';
