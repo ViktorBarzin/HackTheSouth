@@ -1,1 +1,17 @@
 add videos to playlist from the more button on every video
+
+what happens when internet is slow?
+
+export current queue to playlist
+
+if songs in playlist are also in recomended list, there will be duplicates
+
+remove first from playlist
+
+live videos break text formating
+
+loop song button
+
+reload divs on clicking show more button below all suggestions
+
+accessing from youtube.com and the going to youtube video fails to load plugin
