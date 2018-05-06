@@ -26,19 +26,97 @@ document.head.appendChild(script);*/
 
 //var divToMove = $('ytd-compact-autoplay-renderer').find("ytd-compact-video-renderer");
 //divToMove.remove();
+function saveToStorage(){
+  /*$("#left-defaults").children().each(function(index){
+    result.push($(this).html());
+  })*/
+
+
+  var result = [];
+  var songs = $("#left-defaults").children();
+
+  for(var i=0;i<songs.length;i++){
+    var htmlToDivify = songs[i].outerHTML;
+    //htmlToDivify = htmlToDivify.replace(/<yt[d]*-(.*?)[ ]/gm, "<div ");
+    //htmlToDivify = htmlToDivify.replace(/<\/yt.*>/gm, "</div>");
+    if(songs[i].style.display != "none"){
+      result.push(htmlToDivify);
+    }
+  }
+
+
+  /*for(var i=0;i<result.length;i++){
+	   //result.push(defaultChild[i].clone().html());
+     console.log(result[i]);
+  }*/
+  localStorage.setItem('playlist', JSON.stringify(result));
+}
+
+//executed on song dropped in left-defaults
+function onDropEvent(el, target){
+  if (nextSong != null) {
+    var nextSong = $("#left-defaults").children().find("a")[0].href;
+  }
+  function playNextSong(){
+    window.location.href = nextSong;
+  }
+  $('video')[0].addEventListener('ended',playNextSong,false);
+
+  //format dropped element
+  if(target.id == "left-defaults" && $(el).find("span").length > 0){
+    $(el).css("display", "none");
+    $(el).after("<div><a href=\"" + $(el).find('a')[0].href + "\"><img src=\""+  $(el).find("img")[0].src +"\"/><h3>" + $(el).find("span")[1].innerText.trim() + " </h3></a></div>");
+  //  console.log()
+  }
+
+
+  saveToStorage();
+}
+
 
 function reloadPage(){
+  if($("#left-defaults").length != 0) return;
+
   $("#items").prepend("<div id='left-defaults'></div>");
+
+
+
   var divToMove = $('ytd-compact-autoplay-renderer').find("ytd-compact-video-renderer");
 
   divToMove.remove();
-  $("#left-defaults").append(divToMove);
+  //$("#left-defaults").append(divToMove);
+  //because we do not need the default recommended
+  $("#right-defaults").prepend(divToMove);
+
+  divToMove.wrap("<div></div>");
+
+  //append all items from localStorage
+  var savedSongs = JSON.parse(localStorage.getItem("playlist"));
+  if(savedSongs != null){
+    for(var i=0; i<savedSongs.length;i++){
+      $("#left-defaults").append(savedSongs[i]);
+    }
+  }
+
 
   //$("#left-defaults").after("<div id='right-defaults'></div>");
   $("#left-defaults").siblings("ytd-compact-video-renderer").wrapAll("<div id='right-defaults'></div>");
   $("#right-defaults").children("ytd-compact-video-renderer").each(function(index){
     $(this).wrap("<div></div>");
-  })
+  });
+
+  //remove playlist
+  $("ytd-compact-radio-renderer").remove();
+
+  //edit left-defaults style
+  $("#left-defaults").css({
+    "background-color": "#e2efff",
+    "background-image": "C:\Users\Atanas\Desktop\background.png",
+    "border": "5px dashed #a4a8ad",
+    "width": "100%",
+    "min-height": "100px"
+  });
+
 
   var script = document.createElement('script');
   script.type = 'text/javascript';
@@ -75,7 +153,14 @@ function reloadPage(){
         var crossvent = require('crossvent');
         var sortable = $('sortable');
 
-        dragula([$('left-defaults'), $('right-defaults')]);
+        var drake = dragula([$('left-defaults'), $('right-defaults')]);
+        //saveToStorage();
+
+        drake.on("drop", function(el, target, source, sibling){
+          onDropEvent(el, target);
+
+          //saveToStorage();
+        });
         // dragula([$('playlist'), $('suggestions')]);
 
         crossvent.add(sortable, 'click', clickHandler);
@@ -294,6 +379,7 @@ function reloadPage(){
 
     }, {}]
 }, {}, [1])
+//end of dragula
 
 
 }
