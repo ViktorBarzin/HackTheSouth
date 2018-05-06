@@ -15,3 +15,5 @@ loop song button
 reload divs on clicking show more button below all suggestions
 
 accessing from youtube.com and the going to youtube video fails to load plugin
+
+add readme on github and put into extension store
