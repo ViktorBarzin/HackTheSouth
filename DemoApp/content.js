@@ -6,7 +6,7 @@
   setTimeout(function(){
     console.log("jQuery shenanigans!");
     reloadPage();
-  }, 3000);
+  }, 500);
 //}
 
 
@@ -15,5 +15,5 @@ $("body").on("click", "a", function(e){
     console.log("jQuery shenanigans!");
     reloadPage();
 
-  }, 3000);
+  }, 1500);
 });
